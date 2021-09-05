@@ -35,7 +35,7 @@ func GetUserById(targetId int) (models.UserAPI, int, error) {
 }
 
 func AddUser(newUser *models.User) (models.UserAPI, error) {
-	res := config.Db.Create(newUser)
+	res := config.Db.Select("name", "email", "password").Create(newUser)
 	if res.Error != nil {
 		return models.UserAPI{}, res.Error
 	}
@@ -100,7 +100,7 @@ func LoginUser(user *models.User) (string ,error) {
 		return "", res.Error
 	}
 
-	token, err := implementjwt.CreateToken(user.Id)
+	token, err := implementjwt.CreateToken(int(user.Id))
 
 	if err != nil {
 		return "", err
