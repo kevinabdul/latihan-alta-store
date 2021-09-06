@@ -22,7 +22,7 @@ func GetCartController(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, struct {
 			Status 	string
 			Message 	string
-		}{Status: "failed", Message: "wrong user id"})
+		}{Status: "failed", Message: "You do not have a cart yet."})
 	}
 
 	return c.JSON(http.StatusOK, struct {

@@ -42,6 +42,13 @@ func AddUserController(c echo.Context) error {
 	newUser := models.User{}
 	c.Bind(&newUser)
 
+	if newUser.Email == "" || newUser.Password == "" {
+		return c.JSON(http.StatusBadRequest, struct {
+			Status  string
+			Message string
+		}{Status: "Failed", Message: "Invalid Email or Password. Make sure its not empty and are of string type"})
+	}
+
 	res, err := user.AddUser(&newUser)
 
 	if err != nil {
