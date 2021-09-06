@@ -5,7 +5,19 @@ import (
 	"lataltastore/models"
 )
 
-func GetCart(userId int) (models.CartAPI, int64, error) {
+func GetCarts() ([]models.CartAPI, error) {
+	var carts []models.CartAPI
+
+	res := config.Db.Model(&models.Cart{}).Find(&carts)
+
+	if res.Error != nil {
+		return []models.CartAPI{}, res.Error
+	}
+
+	return carts, nil
+}
+
+func GetCartByUserId(userId int) (models.CartAPI, int64, error) {
 	var cart models.CartAPI
 
 	res := config.Db.Model(&models.Cart{}).Where(`user_id = ?`, userId).Find(&cart)
@@ -13,6 +25,7 @@ func GetCart(userId int) (models.CartAPI, int64, error) {
 	if res.Error != nil {
 		return models.CartAPI{}, res.RowsAffected, res.Error
 	}
+
 	if res.RowsAffected == 0 {
 		return models.CartAPI{}, res.RowsAffected, res.Error
 	}

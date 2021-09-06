@@ -10,9 +10,22 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func GetCartController(c echo.Context) error {
+func GetCartsController(c echo.Context) error {
+	res, err := cart.GetCarts()
+
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, err.Error())
+	}
+
+	return c.JSON(http.StatusOK, struct {
+		Status 	string
+		Cart 	[]models.CartAPI
+	}{Status: "success", Cart: res})
+}
+
+func GetCartByIdController(c echo.Context) error {
 	userId , _ := strconv.Atoi(c.Request().Header.Get("userId"))
-	cartTarget, rowsAffected, err := cart.GetCart(userId)
+	cartTarget, rowsAffected, err := cart.GetCartByUserId(userId)
 
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, err.Error())

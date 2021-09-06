@@ -6,8 +6,10 @@ import(
 )
 
 func registerCartRoutes() {
-	e.GET("/cart", cart.GetCartController, middlewares.AuthenticateUser)
+	e.GET("/carts", cart.GetCartsController, middlewares.AuthenticateUser)
 
-	e.POST("/cart", cart.CreateCartController, middlewares.AuthenticateUser)
+	e.GET("/carts/:id", cart.GetCartByIdController, middlewares.AuthenticateUser, middlewares.CheckId)
+
+	e.POST("/carts", cart.CreateCartController, middlewares.AuthenticateUser)
 }
 
