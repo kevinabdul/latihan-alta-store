@@ -9,3 +9,8 @@ type Cart struct {
 	Id		uint 		`gorm:"primaryKey`
 	UserId	uint 		`gorm:"unique"`
 }
+
+type CartAPI struct {
+	Id		uint 		`gorm:"primaryKey`
+	UserId	uint 		`gorm:"unique"`
+}

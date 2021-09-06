@@ -27,7 +27,7 @@ func GetCartController(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, struct {
 		Status 	string
-		Cart 	models.Cart
+		Cart 	models.CartAPI
 	}{Status: "success", Cart: cartTarget})
 }
 

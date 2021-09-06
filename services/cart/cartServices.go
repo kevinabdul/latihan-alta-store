@@ -3,19 +3,18 @@ package services
 import (
 	"lataltastore/config"
 	"lataltastore/models"
-	"fmt"
 )
 
-func GetCart(userId int) (models.Cart, int64, error) {
-	var cart models.Cart
+func GetCart(userId int) (models.CartAPI, int64, error) {
+	var cart models.CartAPI
 
-	res := config.Db.Model(&models.Cart{}).Find(&cart, userId)
+	res := config.Db.Model(&models.Cart{}).Where(`user_id = ?`, userId).Find(&cart)
 
 	if res.Error != nil {
-		return models.Cart{}, res.RowsAffected, res.Error
+		return models.CartAPI{}, res.RowsAffected, res.Error
 	}
 	if res.RowsAffected == 0 {
-		return models.Cart{}, res.RowsAffected, res.Error
+		return models.CartAPI{}, res.RowsAffected, res.Error
 	}
 	return cart, res.RowsAffected, nil
 }
