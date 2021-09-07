@@ -13,8 +13,6 @@ func New() *echo.Echo {
 
 	registerUserRoutes()
 
-	registerCartRoutes()
-
 	registerProductRoutes()
 
 	return e

@@ -2,6 +2,7 @@ package routes
 
 import(
 	user "lataltastore/controllers/user"
+	cart "lataltastore/controllers/cart"
 	"lataltastore/middlewares"
 )
 
@@ -24,5 +25,8 @@ func registerUserRoutes() {
 
 	r.DELETE("", user.DeleteUserController)
 	
+	r.GET("/carts", cart.GetCartByUserIdController)
+
+	r.PUT("/carts", cart.UpdateCartByUserIdController)
 }
 
