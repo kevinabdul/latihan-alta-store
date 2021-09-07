@@ -15,5 +15,7 @@ func New() *echo.Echo {
 
 	registerCartRoutes()
 
+	registerProductRoutes()
+
 	return e
 }

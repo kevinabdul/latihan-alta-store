@@ -40,7 +40,7 @@ func AddUser(newUser *models.User) (models.UserAPI, error) {
 		return models.UserAPI{}, res.Error
 	}
 	newUserAPI := models.UserAPI{}
-	newUserAPI.Id = newUser.Id
+	newUserAPI.ID = newUser.ID
 	newUserAPI.Name = newUser.Name
 	newUserAPI.Email = newUser.Email
 	
@@ -61,7 +61,7 @@ func EditUser(newData models.User, targetId int) (models.UserAPI ,int, error) {
 	}
 
 	edittedUser := models.UserAPI{}
-	edittedUser.Id = targetUser.Id
+	edittedUser.ID = targetUser.ID
 	edittedUser.Name = targetUser.Name
 	edittedUser.Email = targetUser.Email
 
@@ -100,7 +100,7 @@ func LoginUser(user *models.User) (string ,error) {
 		return "", res.Error
 	}
 
-	token, err := implementjwt.CreateToken(int(user.Id))
+	token, err := implementjwt.CreateToken(int(user.ID))
 
 	if err != nil {
 		return "", err

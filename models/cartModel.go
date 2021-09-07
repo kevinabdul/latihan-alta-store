@@ -1,16 +1,18 @@
 package models
 
 import (
-	"gorm.io/gorm"
+	"time"
 )
 
 type Cart struct {
-	gorm.Model
-	Id		uint 		`gorm:"primaryKey`
-	UserId	uint 		`gorm:"unique"`
+	UserID			uint 		`gorm:"primaryKey;autoIncrement:false"`
+	ProductName		string 		`gorm:"primaryKey;not null;type:varchar(50)" json:"product_name"`
+	Quantity		uint 		`gorm:"not null;type:smallint" json:"quantity"`
+	CreatedAt 		time.Time
+	UpdatedAt		time.Time
 }
 
 type CartAPI struct {
-	Id		uint 		`gorm:"primaryKey`
-	UserId	uint 		`gorm:"unique"`
+	ProductName 	string		`gorm:"primaryKey;not null;type:varchar(50)" json:"product_name"`
+	Quantity		uint 		`gorm:"not null;type:smallint" json:"quantity"`
 }
