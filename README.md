@@ -1,6 +1,8 @@
 Alta Store Task 
 
 ## Endpoint
+
+# Users
 ```bash
 GET     /users
 ```
@@ -22,6 +24,8 @@ PUT     /users/:id
 ``` bash
 DELETE  /users/:id
 ```
+
+# Products
 ``` bash
 GET     /products
 ```
