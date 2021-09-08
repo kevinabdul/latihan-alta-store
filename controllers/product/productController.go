@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"net/http"
-	"strconv"
+	"fmt"
 
 	product "lataltastore/services/product"
 	models "lataltastore/models"
@@ -11,21 +11,9 @@ import (
 )
 
 func GetProductsController(c echo.Context) error {
-	res, err := product.GetProducts()
-
-	if err != nil {
-		return c.JSON(http.StatusBadRequest, err.Error())
-	}
-
-	return c.JSON(http.StatusOK, struct {
-		Status 		string
-		Products 	[]models.ProductAPI
-	}{Status: "success", Products: res})
-}
-
-func GetProductByIdController(c echo.Context) error {
-	productId , _ := strconv.Atoi(c.Param("id"))
-	productTarget, rowsAffected, err := product.GetProductById(productId)
+	categoryName := c.QueryParam("category")
+	fmt.Println(categoryName)
+	productsTarget, rowsAffected, err := product.GetProducts(categoryName)
 
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, err.Error())
@@ -35,11 +23,11 @@ func GetProductByIdController(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, struct {
 			Status 	string
 			Message string
-		}{Status: "failed", Message: "No product found with the provided id. Please check your product id"})
+		}{Status: "failed", Message: "No product found with the provided category. Please check your product category name"})
 	}
 
 	return c.JSON(http.StatusOK, struct {
-		Status 	string
-		Product models.ProductAPI
-	}{Status: "success", Product: productTarget})
+		Status 		string
+		Products 	[]models.ProductAPI
+	}{Status: "success", Products: productsTarget})
 }

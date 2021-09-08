@@ -5,29 +5,27 @@ import (
 	"lataltastore/models"
 )
 
-func GetProducts() ([]models.ProductAPI, error) {
+func GetProducts(categoryName string) ([]models.ProductAPI, int64, error) {
 	var products []models.ProductAPI
 
-	res := config.Db.Model(&models.Product{}).Find(&products)
+	var rowsAffected int64
 
-	if res.Error != nil {
-		return []models.ProductAPI{}, res.Error
+
+	if categoryName == "" {
+		prodSearchRes := config.Db.Table("products").Select("products.product_name, categories.category_name, products.price").Joins("left join categories on categories.category_id = products.category_id").Scan(&products)	
+
+		if prodSearchRes.Error != nil ||  prodSearchRes.RowsAffected == 0 {
+			return []models.ProductAPI{}, prodSearchRes.RowsAffected, prodSearchRes.Error
+		}
+		rowsAffected = prodSearchRes.RowsAffected
+	} else {
+		prodSearchRes := config.Db.Table("products").Select("products.product_name, categories.category_name, products.price").Joins("left join categories on categories.category_id = products.category_id").Where("categories.category_name = ?", categoryName).Scan(&products)	
+		
+		if prodSearchRes.Error != nil ||  prodSearchRes.RowsAffected == 0 {
+			return []models.ProductAPI{}, prodSearchRes.RowsAffected, prodSearchRes.Error
+		}		
+		rowsAffected = prodSearchRes.RowsAffected
 	}
-
-	return products, nil
-}
-
-func GetProductById(productId int) (models.ProductAPI, int64, error) {
-	var product models.ProductAPI
-
-	res := config.Db.Model(&models.Product{}).Where(`id = ?`, productId).Find(&product)
-
-	if res.Error != nil {
-		return models.ProductAPI{}, res.RowsAffected, res.Error
-	}
-
-	if res.RowsAffected == 0 {
-		return models.ProductAPI{}, res.RowsAffected, res.Error
-	}
-	return product, res.RowsAffected, nil
+	
+	return products, rowsAffected, nil
 }

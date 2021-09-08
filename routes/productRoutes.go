@@ -6,7 +6,5 @@ import(
 
 func registerProductRoutes() {
 	e.GET("/products", product.GetProductsController)
-
-	e.GET("/products/:id", product.GetProductByIdController)
 }
 
