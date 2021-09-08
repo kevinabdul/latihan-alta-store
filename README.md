@@ -28,6 +28,3 @@ DELETE  /users/:id
 ``` bash
 GET     /products
 ```
-``` bash
-GET     /products/:id
-```
