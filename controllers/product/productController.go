@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"net/http"
-	"fmt"
 
 	product "lataltastore/services/product"
 	models "lataltastore/models"
@@ -12,11 +11,14 @@ import (
 
 func GetProductsController(c echo.Context) error {
 	categoryName := c.QueryParam("category")
-	fmt.Println(categoryName)
+
 	productsTarget, rowsAffected, err := product.GetProducts(categoryName)
 
 	if err != nil {
-		return c.JSON(http.StatusBadRequest, err.Error())
+		return c.JSON(http.StatusBadRequest, struct {
+			Status 	string
+			Message string
+		}{Status: "failed", Message: err.Error()})
 	}
 
 	if rowsAffected == int64(0) {
