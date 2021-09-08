@@ -19,7 +19,7 @@ POST    /users
 PUT     /users/:id
 ```
 ``` bash
-PUT     /users/:id
+PUT     /users/:id/carts
 ```
 ``` bash
 DELETE  /users/:id
