@@ -5,7 +5,7 @@ alter table products
 modify updated_at datetime default current_timestamp on update current_timestamp;
 
 
-insert into products(name, category, price) values
+insert into products(product_name, category, price) values
 ("Manusia Harimau", "book", 52000), ("Samsung Galaxy S21 Ultra", "electronic device", 21740800),
 ("Kipas Angin Miyako", "electronic device", 235000), ("Samsung Galaxy S20", "electronic device", 15140800),
 ("Macbook M1", "electronic device", 16880900), ("Lenovo Idea Thinkpad xx", "electronic device", 9550800),

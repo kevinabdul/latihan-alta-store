@@ -32,41 +32,43 @@ func GetCartByUserId(userId int) ([]models.CartAPI, error) {
 func UpdateCartByUserId(userCart []models.Cart, userId int)  (int64, error) {
 	var rowsAffected int64
 
-	for _, v := range userCart {
-		if v.Quantity == 0 {
+	for _, cartItem := range userCart {
+		if cartItem.Quantity == 0 {
 			continue
 		}
-		v.UserID = uint(userId)
+		
+		cartItem.UserID = uint(userId)
+		
 		cart := models.Cart{}
 		
-		res := config.Db.Where(`user_id = ? AND product_name = ?`, userId, v.ProductName).Find(&cart)
+		productTarget := models.Product{}
+		prodSearchRes := config.Db.Where(`product_name = ?`, cartItem.ProductName).Find(&productTarget)
 
-		if res.Error != nil {
-			return res.RowsAffected, res.Error
+		if prodSearchRes.Error != nil {
+			return prodSearchRes.RowsAffected, prodSearchRes.Error
 		}
 
-		if res.RowsAffected == 0 {
-			res2 := config.Db.Select("UserID", "ProductName", "Quantity").Create(&v)
+		if prodSearchRes.RowsAffected == 0 {
+			continue
+		}
+		
+		cartItemSearchRes := config.Db.Where(`user_id = ? AND product_name = ?`, userId, cartItem.ProductName).Find(&cart)
 
-			if res2.Error != nil {
-				return res.RowsAffected, res2.Error
+		if cartItemSearchRes.Error != nil {
+			return cartItemSearchRes.RowsAffected, cartItemSearchRes.Error
+		} else if cartItemSearchRes.RowsAffected == 0 {
+			insertRes := config.Db.Select("UserID", "ProductName", "Quantity").Create(&cartItem)
+
+			if insertRes.Error != nil || insertRes.RowsAffected == 0 {
+				return insertRes.RowsAffected, insertRes.Error
 			}
 
-			if res2.RowsAffected == 0 {
-				return res.RowsAffected, res2.Error
-			}
 			rowsAffected++
-		}
-
-		if res.RowsAffected != 0 {
-			res2 := config.Db.Model(&cart).Select("quantity").Updates(v)
+		} else if cartItemSearchRes.RowsAffected != 0 && cart.Quantity != cartItem.Quantity{
+			updateRes := config.Db.Model(&cart).Select("quantity").Updates(cartItem)
 			
-			if res2.Error != nil {
-				return res.RowsAffected, res.Error
-			}
-
-			if res2.RowsAffected == 0 {
-				return res.RowsAffected, res.Error
+			if updateRes.Error != nil || updateRes.RowsAffected == 0{
+				return updateRes.RowsAffected, updateRes.Error
 			}
 
 			rowsAffected++
