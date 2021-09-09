@@ -33,7 +33,7 @@ func UpdateCartByUserId(userCart []models.Cart, userId int)  (int64, error) {
 	var rowsAffected int64
 
 	for _, cartItem := range userCart {
-		if cartItem.Quantity == 0 {
+		if cartItem.Quantity == 0 || cartItem.ProductName == ""{
 			continue
 		}
 		
